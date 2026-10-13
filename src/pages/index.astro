@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { SITE_TITLE, SITE_DESCRIPTION, url } from '../consts';
+import { getPosts } from '../lib/posts';
+
+const posts = (await getPosts()).slice(0, 5);
+---
+
+<BaseLayout title={SITE_TITLE}>
+  <section class="intro">
+    <h1>Hi, I'm Bobby.</h1>
+    <p class="lede">{SITE_DESCRIPTION}</p>
+  </section>
+
+  <h2 class="section-title">Latest posts</h2>
+  <PostList posts={posts} />
+  <p><a href={url('/blog/')}>See all posts →</a></p>
+</BaseLayout>
+
+<style>
+  .intro { margin-bottom: 3.5rem; }
+  .lede { font-size: 1.2rem; color: var(--muted); max-width: 34rem; }
+  .section-title { font-size: 0.85rem; font-family: var(--font-mono); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 0.5rem; }
+</style>

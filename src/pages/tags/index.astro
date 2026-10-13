@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { url } from '../../consts';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+const counts = new Map<string, number>();
+for (const p of posts) for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="Tags" description="Browse posts by topic.">
+  <h1>Tags</h1>
+  {tags.length === 0 ? <p class="muted">No tags yet.</p> : (
+    <ul class="cloud">
+      {tags.map(([tag, n]) => (
+        <li><a class="tag" href={url(`/tags/${tag}/`)}>#{tag} <span>{n}</span></a></li>
+      ))}
+    </ul>
+  )}
+</BaseLayout>
+
+<style>
+  .cloud { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .tag { font-size: 0.9rem; padding: 0.3rem 0.8rem; }
+  .tag span { opacity: 0.6; margin-left: 0.2rem; }
+</style>

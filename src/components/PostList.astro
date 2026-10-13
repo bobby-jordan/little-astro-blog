@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../consts';
+import { formatDate } from '../lib/posts';
+
+interface Props { posts: CollectionEntry<'blog'>[] }
+const { posts } = Astro.props;
+---
+
+{posts.length === 0 ? (
+  <p class="muted">No posts yet.</p>
+) : (
+  <ul class="posts">
+    {posts.map((post) => (
+      <li>
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        <div>
+          <a class="title" href={url(`/blog/${post.id}/`)}>
+            {post.data.title}
+            {post.data.draft && <span class="tag">draft</span>}
+          </a>
+          <p class="muted">{post.data.description}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .posts { list-style: none; padding: 0; margin: 0; }
+  li { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+  li:last-child { border-bottom: 0; }
+  time { color: var(--muted); font-family: var(--font-mono); font-size: 0.82rem; padding-top: 0.2rem; }
+  .title { font-weight: 600; color: var(--text); text-decoration: none; }
+  .title:hover { color: var(--accent); }
+  .title .tag { margin-left: 0.5rem; vertical-align: middle; }
+  p { margin: 0.2rem 0 0; font-size: 0.95rem; }
+  @media (max-width: 560px) {
+    li { grid-template-columns: 1fr; gap: 0.15rem; }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import { AUTHOR, GITHUB_URL, url } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="container row">
+    <span>© {year} {AUTHOR}</span>
+    <span class="links">
+      <a href={url('/rss.xml')}>RSS</a>
+      <a href={GITHUB_URL}>GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<style>
+  footer { margin-top: 5rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
+  .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-block: 2rem; }
+  .links { display: flex; gap: 1.25rem; }
+  a { color: var(--muted); }
+  a:hover { color: var(--text); }
+</style>

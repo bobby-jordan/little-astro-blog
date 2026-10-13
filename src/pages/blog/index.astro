@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<BaseLayout title="Blog" description="Every post, newest first.">
+  <h1>Blog</h1>
+  <p class="muted">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+  <PostList posts={posts} />
+</BaseLayout>

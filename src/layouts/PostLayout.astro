@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { url } from '../consts';
+import { formatDate } from '../lib/posts';
+
+interface Props { post: CollectionEntry<'blog'>; readingTime: number }
+const { post, readingTime } = Astro.props;
+const { title, description, pubDate, updatedDate, tags } = post.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="post-head">
+      <p class="meta muted">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readingTime} min read</span>
+        {updatedDate && <span>· updated {formatDate(updatedDate)}</span>}
+      </p>
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+      {tags.length > 0 && (
+        <p class="tags">{tags.map((t) => <a class="tag" href={url(`/tags/${t}/`)}>#{t}</a>)}</p>
+      )}
+    </header>
+    <div class="prose">
+      <slot />
+    </div>
+    <hr />
+    <a href={url('/blog/')}>← All posts</a>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-head { margin-bottom: 2.5rem; }
+  .meta { display: flex; gap: 0.5rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 0.75rem; }
+  .lede { font-size: 1.15rem; color: var(--muted); margin-top: 0.75rem; }
+  .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .prose :global(h2:first-child) { margin-top: 0; }
+</style>
